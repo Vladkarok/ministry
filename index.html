@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Secretary Queue Timer</title>
+  <title data-i18n="title">Secretary Queue Timer</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -11,7 +11,6 @@
       --bg-from: #111d2e;
       --bg-to: #0b0f17;
       --card-bg: rgba(255,255,255,0.035);
-      --card-bg2: rgba(255,255,255,0.015);
       --accent-bg: rgba(100,180,255,0.08);
       --accent-border: rgba(100,180,255,0.18);
       --border: rgba(255,255,255,0.07);
@@ -39,8 +38,38 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      position: relative;
     }
 
+    /* ── Language toggle ── */
+    .lang-switcher {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      gap: 4px;
+    }
+    .lang-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      padding: 4px 9px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      letter-spacing: 0.4px;
+    }
+    .lang-btn:hover { color: var(--text); background: rgba(255,255,255,0.1); }
+    .lang-btn.active {
+      background: rgba(100,180,255,0.18);
+      border-color: rgba(100,180,255,0.35);
+      color: var(--cyan);
+    }
+
+    /* ── Header ── */
     header {
       text-align: center;
       padding: 8px 0 4px;
@@ -69,6 +98,7 @@
       font-weight: 600;
     }
 
+    /* ── Card ── */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -78,7 +108,6 @@
       flex-direction: column;
       gap: 16px;
     }
-
     .card-title {
       font-size: 11px;
       text-transform: uppercase;
@@ -86,13 +115,11 @@
       font-weight: 600;
       color: var(--muted);
     }
-
     .field {
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
-
     label {
       font-size: 13px;
       color: var(--text);
@@ -120,18 +147,14 @@
       width: 100%;
     }
     input[type="number"]:focus,
-    input[type="text"]:focus {
-      border-color: rgba(100,180,255,0.4);
-    }
+    input[type="text"]:focus { border-color: rgba(100,180,255,0.4); }
     input[type="number"]::placeholder,
-    input[type="text"]::placeholder {
-      color: var(--muted);
-    }
-    /* hide number arrows */
+    input[type="text"]::placeholder { color: var(--muted); }
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
     input[type="number"] { -moz-appearance: textfield; }
 
+    /* ── Toggle switch ── */
     .optional-toggle {
       display: flex;
       align-items: center;
@@ -154,10 +177,8 @@
     .toggle-pill::after {
       content: '';
       position: absolute;
-      top: 3px;
-      left: 3px;
-      width: 12px;
-      height: 12px;
+      top: 3px; left: 3px;
+      width: 12px; height: 12px;
       border-radius: 50%;
       background: var(--muted);
       transition: transform 0.2s, background 0.2s;
@@ -170,22 +191,11 @@
       transform: translateX(16px);
       background: var(--cyan);
     }
-    .toggle-label {
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .optional-toggle input:checked ~ .toggle-label {
-      color: var(--text);
-    }
+    .toggle-label { font-size: 13px; color: var(--muted); }
+    .optional-toggle input:checked ~ .toggle-label { color: var(--text); }
 
-    .optional-field {
-      display: none;
-    }
-    .optional-field.visible {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .optional-field { display: none; }
+    .optional-field.visible { display: flex; flex-direction: column; gap: 6px; }
 
     .divider {
       height: 1px;
@@ -193,7 +203,7 @@
       margin: 0 -20px;
     }
 
-    /* Result card */
+    /* ── Result card ── */
     .result-card {
       background: var(--accent-bg);
       border: 1px solid var(--accent-border);
@@ -205,25 +215,19 @@
       min-height: 120px;
       justify-content: center;
     }
-
     .result-empty {
       text-align: center;
       color: var(--muted);
       font-size: 13px;
     }
-
     .result-content {
       display: none;
       flex-direction: column;
       gap: 14px;
     }
-    .result-content.visible {
-      display: flex;
-    }
+    .result-content.visible { display: flex; }
 
-    .result-time {
-      text-align: center;
-    }
+    .result-time { text-align: center; }
     .result-time .label {
       font-size: 11px;
       text-transform: uppercase;
@@ -245,7 +249,14 @@
       margin-top: 3px;
       font-variant-numeric: tabular-nums;
     }
-    .result-time .precision-badge {
+    .result-time .countdown {
+      font-size: 13px;
+      color: var(--cyan);
+      margin-top: 5px;
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+    }
+    .precision-badge {
       display: inline-block;
       margin-top: 6px;
       font-size: 11px;
@@ -265,11 +276,7 @@
       color: var(--green);
     }
 
-    .result-breakdown {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .result-breakdown { display: flex; flex-direction: column; gap: 6px; }
     .breakdown-row {
       display: flex;
       justify-content: space-between;
@@ -277,8 +284,11 @@
       font-size: 13px;
     }
     .breakdown-row .bk-label { color: var(--muted); }
-    .breakdown-row .bk-value { color: var(--text); font-variant-numeric: tabular-nums; font-weight: 500; }
-
+    .breakdown-row .bk-value {
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      font-weight: 500;
+    }
     .total-wait {
       border-top: 1px solid var(--border);
       padding-top: 8px;
@@ -297,27 +307,33 @@
 </head>
 <body>
   <div class="container">
+
+    <div class="lang-switcher">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="ua">UA</button>
+    </div>
+
     <header>
-      <h1>Secretary Queue Timer</h1>
-      <p>Estimates when you'll receive the Secretary of Science buff</p>
+      <h1 data-i18n="title">Secretary Queue Timer</h1>
+      <p data-i18n="subtitle">Estimates when you'll receive the Secretary buff</p>
     </header>
 
-    <div class="clock">Current local time: <span id="clock">--:--:--</span></div>
+    <div class="clock" data-i18n-prefix="clockLabel"><span id="clock">--:--:--</span></div>
 
     <div class="card">
-      <div class="card-title">Queue Info</div>
+      <div class="card-title" data-i18n="cardTitle">Queue Info</div>
 
       <div class="field">
         <label>
-          Additional queue count
-          <span class="hint">people ahead of you</span>
+          <span data-i18n="queueLabel">Additional queue count</span>
+          <span class="hint" data-i18n="queueHint">people ahead of you</span>
         </label>
         <input
           type="number"
           id="additionalQueue"
+          data-i18n-placeholder="queuePlaceholder"
           placeholder="e.g. 12"
-          min="0"
-          max="999"
+          min="0" max="999"
           inputmode="numeric"
           autocomplete="off"
         />
@@ -328,17 +344,18 @@
       <label class="optional-toggle">
         <input type="checkbox" id="useRemaining" />
         <span class="toggle-pill"></span>
-        <span class="toggle-label">I know the current player's time in office</span>
+        <span class="toggle-label" data-i18n="toggleLabel">I know the current player's time in office</span>
       </label>
 
       <div class="optional-field" id="remainingField">
         <label>
-          Time in office (current player)
-          <span class="hint">MM:SS — shown in-game</span>
+          <span data-i18n="timeLabel">Time in office (current player)</span>
+          <span class="hint" data-i18n="timeHint">MM:SS — shown in-game</span>
         </label>
         <input
           type="text"
           id="timeInOffice"
+          data-i18n-placeholder="timePlaceholder"
           placeholder="e.g. 02:16"
           maxlength="5"
           autocomplete="off"
@@ -348,60 +365,184 @@
     </div>
 
     <div class="result-card">
-      <div class="result-empty" id="resultEmpty">Enter additional queue count above</div>
+      <div class="result-empty" id="resultEmpty" data-i18n="emptyHint">Enter additional queue count above</div>
       <div class="result-content" id="resultContent">
         <div class="result-time">
-          <div class="label">Estimated buff time</div>
+          <div class="label" data-i18n="resultLabel">Estimated buff time</div>
           <div class="time-value" id="resultTimeValue">--:--:--</div>
           <div class="date-value" id="resultDateValue"></div>
+          <div class="countdown" id="resultCountdown"></div>
           <span class="precision-badge approx" id="precisionBadge">± 2:30</span>
         </div>
         <div class="result-breakdown">
           <div class="breakdown-row">
-            <span class="bk-label">Current player remaining</span>
+            <span class="bk-label" data-i18n="bkCurrentLabel">Current player remaining</span>
             <span class="bk-value" id="bkCurrent">—</span>
           </div>
           <div class="breakdown-row">
-            <span class="bk-label">Main queue (50 players × 5 min)</span>
+            <span class="bk-label" data-i18n="bkMainLabel">Main queue (50 players × 5 min)</span>
             <span class="bk-value">250 min</span>
           </div>
           <div class="breakdown-row">
-            <span class="bk-label">Additional queue</span>
+            <span class="bk-label" data-i18n="bkAddLabel">Additional queue</span>
             <span class="bk-value" id="bkAdditional">—</span>
           </div>
           <div class="breakdown-row total-wait">
-            <span class="bk-label">Total wait</span>
+            <span class="bk-label" data-i18n="bkTotalLabel">Total wait</span>
             <span class="bk-value" id="bkTotal">—</span>
           </div>
         </div>
       </div>
     </div>
 
-    <footer>Main queue assumed full (50/50) · 5 min per player</footer>
+    <footer data-i18n="footer">Main queue assumed full (50/50) · 5 min per player</footer>
   </div>
 
   <script>
-    const MAIN_QUEUE = 50;
-    const SLOT_SECONDS = 5 * 60; // 300s
+    // ── i18n ───────────────────────────────────────────────────────────────
+    const TRANSLATIONS = {
+      en: {
+        title:          'Secretary Queue Timer',
+        subtitle:       "Estimates when you'll receive the Secretary buff",
+        clockLabel:     'Current local time:\u00a0',
+        cardTitle:      'Queue Info',
+        queueLabel:     'Additional queue count',
+        queueHint:      'people ahead of you',
+        queuePlaceholder: 'e.g. 12',
+        toggleLabel:    "I know the current player's time in office",
+        timeLabel:      'Time in office (current player)',
+        timeHint:       'MM:SS — shown in-game',
+        timePlaceholder: 'e.g. 02:16',
+        emptyHint:      'Enter additional queue count above',
+        resultLabel:    'Estimated buff time',
+        countdown:      (h, m, s) => `in ${h}h ${pad(m)}m ${pad(s)}s`,
+        countdownSoon:  'very soon',
+        badgeApprox:    '± 2:30',
+        badgeExact:     'Exact',
+        bkCurrentLabel: 'Current player remaining',
+        bkCurrentUnknown: '~2:30 (unknown)',
+        bkMainLabel:    'Main queue (50 players × 5 min)',
+        bkAddLabel:     'Additional queue',
+        bkTotalLabel:   'Total wait',
+        footer:         'Main queue assumed full (50/50) · 5 min per player',
+        dur: (h, m, s) => h > 0 ? `${h}h ${pad(m)}m ${pad(s)}s` : m > 0 ? `${m}m ${pad(s)}s` : `${s}s`,
+      },
+      ua: {
+        title:          'Таймер черги секретаря',
+        subtitle:       'Розраховує, коли ви отримаєте бафф секретаря',
+        clockLabel:     'Поточний місцевий час:\u00a0',
+        cardTitle:      'Черга',
+        queueLabel:     'Кількість у додатковій черзі',
+        queueHint:      'людей перед вами',
+        queuePlaceholder: 'напр. 12',
+        toggleLabel:    'Я знаю час поточного гравця в офісі',
+        timeLabel:      'Час в офісі (поточний гравець)',
+        timeHint:       'ХХ:СС — показується в грі',
+        timePlaceholder: 'напр. 02:16',
+        emptyHint:      'Введіть кількість у додатковій черзі',
+        resultLabel:    'Очікуваний час баффу',
+        countdown:      (h, m, s) => `через ${h}г ${pad(m)}хв ${pad(s)}с`,
+        countdownSoon:  'дуже скоро',
+        badgeApprox:    '± 2:30',
+        badgeExact:     'Точно',
+        bkCurrentLabel: 'Залишок поточного гравця',
+        bkCurrentUnknown: '~2:30 (невідомо)',
+        bkMainLabel:    'Основна черга (50 гравців × 5 хв)',
+        bkAddLabel:     'Додаткова черга',
+        bkTotalLabel:   'Загальне очікування',
+        footer:         'Основна черга заповнена (50/50) · 5 хв на гравця',
+        dur: (h, m, s) => h > 0 ? `${h}г ${pad(m)}хв ${pad(s)}с` : m > 0 ? `${m}хв ${pad(s)}с` : `${s}с`,
+      },
+    };
 
-    // ── Clock ──────────────────────────────────────────────────────────────
-    function padZ(n) { return String(n).padStart(2, '0'); }
-    function formatTime(d) {
-      return `${padZ(d.getHours())}:${padZ(d.getMinutes())}:${padZ(d.getSeconds())}`;
-    }
-    function formatDate(d) {
-      return `${d.getFullYear()}-${padZ(d.getMonth()+1)}-${padZ(d.getDate())}`;
+    let lang = localStorage.getItem('lang') || 'en';
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function t(key) { return TRANSLATIONS[lang][key] || TRANSLATIONS.en[key] || key; }
+
+    function applyLang() {
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (el.tagName === 'TITLE') { el.textContent = t(key); return; }
+        el.textContent = t(key);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = t(el.dataset.i18nPlaceholder);
+      });
+      // clock label (text node before the span)
+      const clockEl = document.querySelector('.clock');
+      clockEl.childNodes[0].textContent = t('clockLabel');
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      localStorage.setItem('lang', lang);
+      updateCountdown();
+      updateBkCurrent();
     }
 
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => { lang = btn.dataset.lang; applyLang(); });
+    });
+
+    // ── Constants ──────────────────────────────────────────────────────────
+    const MAIN_QUEUE   = 50;
+    const SLOT_S       = 5 * 60; // 300 s
+
+    // ── State ──────────────────────────────────────────────────────────────
+    let buffTargetMs    = null; // fixed once on input change
+    let totalWaitS      = 0;
+    let isApprox        = true;
+    let currentRemainS  = 0;
+    let additionalCount = 0;
+
+    // ── Helpers ────────────────────────────────────────────────────────────
+    function formatTime(d) { return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`; }
+    function formatDate(d) { return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+
+    function parseMMSS(str) {
+      const parts = str.trim().split(':');
+      if (parts.length === 2) {
+        const m = parseInt(parts[0], 10), s = parseInt(parts[1], 10);
+        if (!isNaN(m) && !isNaN(s) && s < 60) return m * 60 + s;
+      }
+      return null;
+    }
+
+    // ── Countdown (ticks live, target stays fixed) ─────────────────────────
+    function updateCountdown() {
+      const el = document.getElementById('resultCountdown');
+      if (!buffTargetMs) { el.textContent = ''; return; }
+      const diffS = Math.round((buffTargetMs - Date.now()) / 1000);
+      if (diffS <= 0) { el.textContent = t('countdownSoon'); return; }
+      const h = Math.floor(diffS / 3600);
+      const m = Math.floor((diffS % 3600) / 60);
+      const s = diffS % 60;
+      el.textContent = t('countdown')(h, m, s);
+    }
+
+    function updateBkCurrent() {
+      if (!buffTargetMs) return;
+      const el = document.getElementById('bkCurrent');
+      if (isApprox) {
+        el.textContent = t('bkCurrentUnknown');
+      } else {
+        el.textContent = `${pad(Math.floor(currentRemainS / 60))}:${pad(currentRemainS % 60)}`;
+      }
+    }
+
+    // ── Tick (clock + countdown only — target time never changes here) ─────
     setInterval(() => {
       document.getElementById('clock').textContent = formatTime(new Date());
-      recalc();
+      updateCountdown();
     }, 1000);
     document.getElementById('clock').textContent = formatTime(new Date());
 
-    // ── Toggle ─────────────────────────────────────────────────────────────
-    const useRemainingCb = document.getElementById('useRemaining');
-    const remainingField = document.getElementById('remainingField');
+    // ── Inputs ─────────────────────────────────────────────────────────────
+    const useRemainingCb   = document.getElementById('useRemaining');
+    const remainingField   = document.getElementById('remainingField');
     const timeInOfficeInput = document.getElementById('timeInOffice');
 
     useRemainingCb.addEventListener('change', () => {
@@ -415,80 +556,48 @@
       }
     });
 
-    // Auto-format MM:SS as user types
-    timeInOfficeInput.addEventListener('input', (e) => {
+    timeInOfficeInput.addEventListener('input', e => {
       let raw = e.target.value.replace(/[^0-9]/g, '');
       if (raw.length > 4) raw = raw.slice(0, 4);
-      if (raw.length > 2) {
-        e.target.value = raw.slice(0, 2) + ':' + raw.slice(2);
-      } else {
-        e.target.value = raw;
-      }
+      e.target.value = raw.length > 2 ? raw.slice(0, 2) + ':' + raw.slice(2) : raw;
       recalc();
     });
 
     document.getElementById('additionalQueue').addEventListener('input', recalc);
 
-    // ── Parse MM:SS ────────────────────────────────────────────────────────
-    function parseMMSS(str) {
-      const parts = str.trim().split(':');
-      if (parts.length === 2) {
-        const m = parseInt(parts[0], 10);
-        const s = parseInt(parts[1], 10);
-        if (!isNaN(m) && !isNaN(s) && s < 60) return m * 60 + s;
-      }
-      return null;
-    }
-
-    // ── Format duration ────────────────────────────────────────────────────
-    function formatDuration(totalSeconds) {
-      const h = Math.floor(totalSeconds / 3600);
-      const m = Math.floor((totalSeconds % 3600) / 60);
-      const s = totalSeconds % 60;
-      if (h > 0) return `${h}h ${padZ(m)}m ${padZ(s)}s`;
-      if (m > 0) return `${m}m ${padZ(s)}s`;
-      return `${s}s`;
-    }
-
-    // ── Recalc ─────────────────────────────────────────────────────────────
+    // ── Recalc — called only when inputs change ────────────────────────────
     function recalc() {
       const queueInput = document.getElementById('additionalQueue').value.trim();
-      const resultEmpty = document.getElementById('resultEmpty');
+      const resultEmpty   = document.getElementById('resultEmpty');
       const resultContent = document.getElementById('resultContent');
 
       if (queueInput === '' || isNaN(+queueInput) || +queueInput < 0) {
+        buffTargetMs = null;
         resultEmpty.style.display = '';
         resultContent.classList.remove('visible');
         return;
       }
 
-      const additionalCount = Math.max(0, Math.floor(+queueInput));
+      additionalCount = Math.max(0, Math.floor(+queueInput));
 
-      let currentPlayerRemainingS;
-      let isApprox = true;
+      isApprox = true;
+      currentRemainS = SLOT_S / 2; // default: midpoint 2:30
 
       if (useRemainingCb.checked && timeInOfficeInput.value.trim()) {
         const parsed = parseMMSS(timeInOfficeInput.value);
         if (parsed !== null) {
-          const remaining = SLOT_SECONDS - parsed;
-          currentPlayerRemainingS = Math.max(0, remaining);
+          currentRemainS = Math.max(0, SLOT_S - parsed);
           isApprox = false;
-        } else {
-          // invalid input — use approx
-          currentPlayerRemainingS = SLOT_SECONDS / 2;
         }
-      } else {
-        currentPlayerRemainingS = SLOT_SECONDS / 2; // 2:30 midpoint
       }
 
-      const mainWaitS = MAIN_QUEUE * SLOT_SECONDS;
-      const additionalWaitS = additionalCount * SLOT_SECONDS;
-      const totalS = currentPlayerRemainingS + mainWaitS + additionalWaitS;
+      totalWaitS = currentRemainS + MAIN_QUEUE * SLOT_S + additionalCount * SLOT_S;
 
-      const now = new Date();
-      const buffTime = new Date(now.getTime() + totalS * 1000);
+      // Lock in the target time NOW (won't drift with the clock)
+      buffTargetMs = Date.now() + totalWaitS * 1000;
 
-      // Update result
+      // Render fixed parts
+      const buffTime = new Date(buffTargetMs);
       resultEmpty.style.display = 'none';
       resultContent.classList.add('visible');
 
@@ -496,31 +605,23 @@
       document.getElementById('resultDateValue').textContent = formatDate(buffTime);
 
       const badge = document.getElementById('precisionBadge');
-      if (isApprox) {
-        badge.textContent = '± 2:30';
-        badge.className = 'precision-badge approx';
-      } else {
-        badge.textContent = 'Exact';
-        badge.className = 'precision-badge exact';
-      }
+      badge.textContent  = isApprox ? t('badgeApprox') : t('badgeExact');
+      badge.className    = 'precision-badge ' + (isApprox ? 'approx' : 'exact');
 
-      // Breakdown
-      if (isApprox) {
-        document.getElementById('bkCurrent').textContent = '~2:30 (unknown)';
-      } else {
-        const rm = Math.floor(currentPlayerRemainingS / 60);
-        const rs = currentPlayerRemainingS % 60;
-        document.getElementById('bkCurrent').textContent = `${padZ(rm)}:${padZ(rs)}`;
-      }
+      updateBkCurrent();
 
+      const h = Math.floor(totalWaitS / 3600);
+      const m = Math.floor((totalWaitS % 3600) / 60);
+      const s = totalWaitS % 60;
       document.getElementById('bkAdditional').textContent =
         `${additionalCount} × 5 min = ${additionalCount * 5} min`;
+      document.getElementById('bkTotal').textContent = t('dur')(h, m, s);
 
-      document.getElementById('bkTotal').textContent = formatDuration(Math.round(totalS));
+      updateCountdown();
     }
 
-    // Init
-    recalc();
+    // ── Init ───────────────────────────────────────────────────────────────
+    applyLang();
   </script>
 </body>
 </html>
