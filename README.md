@@ -1,5 +1,9 @@
 # Secretary Queue Timer
 
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fministry.vladkarok.pp.ua&label=ministry.vladkarok.pp.ua)](https://ministry.vladkarok.pp.ua)
+[![Last commit](https://img.shields.io/github/last-commit/Vladkarok/ministry)](https://github.com/Vladkarok/ministry/commits/master)
+[![License: MIT](https://img.shields.io/github/license/Vladkarok/ministry)](LICENSE)
+
 A single-file tool that estimates **when you'll receive the Secretary buff** when the main auto-appointment queue is full and you're waiting in the additional (overflow) queue.
 
 ## How it works
