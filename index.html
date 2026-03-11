@@ -482,7 +482,8 @@
       },
     };
 
-    let lang = localStorage.getItem('lang') || 'en';
+    const VALID_LANGS = Object.keys(TRANSLATIONS);
+    let lang = VALID_LANGS.includes(localStorage.getItem('lang')) ? localStorage.getItem('lang') : 'en';
 
     function pad(n) { return String(n).padStart(2, '0'); }
 
