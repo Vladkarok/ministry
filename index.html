@@ -311,6 +311,7 @@
     <div class="lang-switcher">
       <button class="lang-btn active" data-lang="en">EN</button>
       <button class="lang-btn" data-lang="ua">UA</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
     </div>
 
     <header>
@@ -425,6 +426,32 @@
         bkAddLabel:     'Additional queue',
         bkTotalLabel:   'Total wait',
         footer:         'Main queue assumed full (50/50) · 5 min per player',
+        dur: (h, m, s) => h > 0 ? `${h}h ${pad(m)}m ${pad(s)}s` : m > 0 ? `${m}m ${pad(s)}s` : `${s}s`,
+      },
+      fr: {
+        title:          'Minuteur de file du Secrétaire',
+        subtitle:       'Estime quand vous recevrez le buff du Secrétaire',
+        clockLabel:     'Heure locale actuelle\u00a0:\u00a0',
+        cardTitle:      'File d\'attente',
+        queueLabel:     'File supplémentaire',
+        queueHint:      'personnes devant vous',
+        queuePlaceholder: 'ex. 12',
+        toggleLabel:    'Je connais le temps en office du joueur actuel',
+        timeLabel:      'Temps en office (joueur actuel)',
+        timeHint:       'MM:SS — affiché en jeu',
+        timePlaceholder: 'ex. 02:16',
+        emptyHint:      'Entrez le nombre dans la file supplémentaire',
+        resultLabel:    'Heure estimée du buff',
+        countdown:      (h, m, s) => `dans ${h}h ${pad(m)}m ${pad(s)}s`,
+        countdownSoon:  'très bientôt',
+        badgeApprox:    '± 2:30',
+        badgeExact:     'Exact',
+        bkCurrentLabel: 'Temps restant (joueur actuel)',
+        bkCurrentUnknown: '~2:30 (inconnu)',
+        bkMainLabel:    'File principale (50 joueurs × 5 min)',
+        bkAddLabel:     'File supplémentaire',
+        bkTotalLabel:   'Attente totale',
+        footer:         'File principale supposée pleine (50/50) · 5 min par joueur',
         dur: (h, m, s) => h > 0 ? `${h}h ${pad(m)}m ${pad(s)}s` : m > 0 ? `${m}m ${pad(s)}s` : `${s}s`,
       },
       ua: {
